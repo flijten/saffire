@@ -152,11 +152,11 @@ static void _ast_walker(t_ast_element *leaf, t_dll *output) {
 
             if (leaf->boolop.op == 0) {
                 // Do boolean AND
-                sprintf(label1, "and_%03d_end", clc);
+                sprintf(end_label, "and_%03d_end", clc);
 
                 _ast_walker(leaf->boolop.l, output);
 
-                opr1 = asm_create_opr(ASM_LINE_TYPE_OP_LABEL, label1, 0);
+                opr1 = asm_create_opr(ASM_LINE_TYPE_OP_LABEL, end_label, 0);
                 dll_append(output, asm_create_codeline(VM_JUMP_IF_FALSE, 1, opr1));
                 dll_append(output, asm_create_codeline(VM_POP_TOP, 0));
 
@@ -164,16 +164,16 @@ static void _ast_walker(t_ast_element *leaf, t_dll *output) {
 
                 // Skip checks&jumps, since we can safely use the result from RHS as result for boolean op node
 
-                dll_append(output, asm_create_labelline(label1));
+                dll_append(output, asm_create_labelline(end_label));
             }
 
             if (leaf->boolop.op == 1) {
                 // Do boolean OR
-                sprintf(label1, "or_%03d_end", clc);
+                sprintf(end_label, "or_%03d_end", clc);
 
                 _ast_walker(leaf->boolop.l, output);
 
-                opr1 = asm_create_opr(ASM_LINE_TYPE_OP_LABEL, label1, 0);
+                opr1 = asm_create_opr(ASM_LINE_TYPE_OP_LABEL, end_label, 0);
                 dll_append(output, asm_create_codeline(VM_JUMP_IF_TRUE, 1, opr1));
                 dll_append(output, asm_create_codeline(VM_POP_TOP, 0));
 
@@ -181,7 +181,7 @@ static void _ast_walker(t_ast_element *leaf, t_dll *output) {
 
                 // Skip checks&jumps, since we can safely use the result from RHS as result for boolean op node
 
-                dll_append(output, asm_create_labelline(label1));
+                dll_append(output, asm_create_labelline(end_label));
             }
 
             break;
@@ -238,11 +238,8 @@ static void _ast_walker(t_ast_element *leaf, t_dll *output) {
                     sprintf(label2, "if_%03d_pre_end", clc);
                     sprintf(label5, "if_%03d_end", clc);
                     sprintf(label6, "if_%03d_else", clc);
-<<<<<<< HEAD
-=======
 
                     //dll_append(output, asm_create_labelline(label1));
->>>>>>> Added label-lengths
 
                     // Comparison first
                     SI0(leaf);
@@ -254,7 +251,7 @@ static void _ast_walker(t_ast_element *leaf, t_dll *output) {
                     dll_append(output, asm_create_codeline(VM_JUMP_IF_FALSE, 1, opr1));
                     dll_append(output, asm_create_codeline(VM_POP_TOP, 0));
 
-                    opr1 = asm_create_opr(ASM_LINE_TYPE_OP_LABEL, label6, 0);
+                    opr1 = asm_create_opr(ASM_LINE_TYPE_OP_LABEL, else_label, 0);
                     dll_append(output, asm_create_codeline(VM_JUMP_IF_FALSE, 1, opr1));
 
                     dll_append(output, asm_create_codeline(VM_POP_TOP, 0));
@@ -264,7 +261,7 @@ static void _ast_walker(t_ast_element *leaf, t_dll *output) {
 
 
                     // Always add else-label
-                    dll_append(output, asm_create_labelline(label6));
+                    dll_append(output, asm_create_labelline(else_label));
 
                     dll_append(output, asm_create_codeline(VM_POP_TOP, 0));
 
@@ -274,7 +271,7 @@ static void _ast_walker(t_ast_element *leaf, t_dll *output) {
                         SI2(leaf);
                     }
 
-                    opr1 = asm_create_opr(ASM_LINE_TYPE_OP_LABEL, label5, 0);
+                    opr1 = asm_create_opr(ASM_LINE_TYPE_OP_LABEL, end_label, 0);
                     dll_append(output, asm_create_codeline(VM_JUMP_ABSOLUTE, 1, opr1));
 =======
                         dll_append(output, asm_create_labelline(label6));
@@ -284,8 +281,6 @@ static void _ast_walker(t_ast_element *leaf, t_dll *output) {
                         opr1 = asm_create_opr(ASM_LINE_TYPE_OP_LABEL, label5, 0);
                         dll_append(output, asm_create_codeline(VM_JUMP_ABSOLUTE, 1, opr1));
 
-<<<<<<< HEAD
-=======
                     }
 
                     if (leaf->opr.nops != 3) {
@@ -294,7 +289,6 @@ static void _ast_walker(t_ast_element *leaf, t_dll *output) {
                     }
 >>>>>>> Added label-lengths
 
->>>>>>> Added label-lengths
                     dll_append(output, asm_create_labelline(label5));
                     break;
 
@@ -331,11 +325,7 @@ static void _ast_walker(t_ast_element *leaf, t_dll *output) {
 
                     sprintf(label3, "dowhile_%03d_cmp", clc);
                     sprintf(label1, "dowhile_%03d", clc);
-<<<<<<< HEAD
-                    sprintf(label2, "dowhile_%03d_pre_end", clc);
-=======
                     sprintf(lable2, "dowhile_%03d_pre_end", clc);
->>>>>>> Added label-lengths
                     sprintf(label5, "dowhile_%03d_end", clc);
 
                     opr1 = asm_create_opr(ASM_LINE_TYPE_OP_LABEL, label5, 0);
@@ -357,11 +347,7 @@ static void _ast_walker(t_ast_element *leaf, t_dll *output) {
                     opr1 = asm_create_opr(ASM_LINE_TYPE_OP_LABEL, label1, 0);
                     dll_append(output, asm_create_codeline(VM_JUMP_ABSOLUTE, 1, opr1));
 
-<<<<<<< HEAD
-                    dll_append(output, asm_create_labelline(label2));
-=======
                     dll_append(output, asm_create_labelline(label));
->>>>>>> Added label-lengths
                     dll_append(output, asm_create_codeline(VM_POP_TOP, 0));
                     dll_append(output, asm_create_codeline(VM_POP_BLOCK, 0));
                     dll_append(output, asm_create_labelline(label5));
